@@ -1,0 +1,160 @@
+<html lang="en">
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <title>Form</title>
+</head>
+
+<body class="bg-secondary">
+    <br>
+    <br>
+      <div class="container col-sm-6">
+    <div class="card mb-3 border-secondary align-bottom">
+       
+            <div class="card-header text-center">
+                Registration Form
+              </div>
+        
+            <div class="card-body">
+         <form name="myForm">
+        <div class="form-row">
+            <div class="col">
+                <label for="firstName">First Name</label>
+              <input type="text" class="form-control" id="firstName"placeholder="First name" required>
+              <span id="errorfirstName" class="text-danger font-weight-bold" ></span>
+            </div>
+            <div class="col">
+                <label for="lastName">Last Name</label>
+              <input type="text" class="form-control" id="lastName" placeholder="Last name" required>
+              <span id="errorLastName" class="text-danger font-weight-bold" ></span>
+            </div>
+          </div>
+    <div>
+        <label>Please Select A Gender</label>
+    </div>
+ <div class="form-group">
+    <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="gender" id="rmale" value="Male" required>
+        <label class="form-check-label" for="rmale">
+          Male
+        </label>
+      </div>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="gender" id="rfemale" value="Female">
+        <label class="form-check-label" for="rfemale">
+          Female
+        </label>
+      </div>
+ </div>
+    <div class="form-group">
+        <label for="emailId">Email address</label>
+        <input type="email" class="form-control" id="emailId" aria-describedby="emailHelp" placeholder="Enter email" required>
+        <small id="emailHelp" class="form-text text-muted">Try with this email "eve.holt@reqres.in" to check Ajax post</small>
+        <span id="errorEmail" class="text-danger font-weight-bold" ></span>
+      </div>
+      <div class="form-group"> 
+        <label for="passwordSecret">Password</label>
+        <input type="password" class="form-control" id="passwordSecret" placeholder="Password">
+        <span id="errorPassword" class="text-danger font-weight-bold" ></span>
+      </div>
+    </form >
+    <div class="form-group row">
+        <div class="col-sm-10">
+          <button id="postData" type="submit" class="btn btn-primary"> Sign up</button>
+        </div>
+      </div>
+    </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="postResult" tabindex="-1" role="dialog" aria-labelledby="postResultLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="postResultlLabel">Post Response</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" id="modalResult">
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Dismiss</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+  <script type="text/javascript">
+     $('#postData').click(function() {
+            callAjax(document.getElementById('emailId').value,document.getElementById('passwordSecret').value);
+    
+        });
+
+    //   $("#btnsubmit").click(function(){
+    //       callAjax(document.getElementById('email').value,document.getElementById('password').value);
+    //   });
+
+      function callAjax(mail,pass){
+        const values={email:mail,password:pass}
+        console.log(values)
+              $.ajax({url: "https://reqres.in/api/register", 
+              type: "POST",
+              data : values,
+              success: function(result){
+                document.getElementById("modalResult").innerHTML="Successful your token id is "+result.token;
+                $('#postResult').modal('show')
+          },
+              error: function(output){
+                document.getElementById("modalResult").innerHTML="Failed please use 'eve.holt@reqres.in' for sucessful post ";
+                $('#postResult').modal('show')
+              }
+          });
+
+      }
+      document.getElementById("firstName").addEventListener("keyup",pressHandlerfirstName);
+      document.getElementById("lastName").addEventListener("keyup",pressHandlerlastName);
+      document.getElementById("passwordSecret").addEventListener("keyup",pressHandlerPassword);
+      document.getElementById("emailId").addEventListener("keyup",pressHandlerEmail)
+      
+
+      function pressHandlerfirstName(e) {
+        if (this.value.length <=2) {
+           document.getElementById("errorfirstName").innerHTML="*More than 2 characters required";
+        } else {
+            document.getElementById("errorfirstName").innerHTML="";
+        }
+    }
+
+    function pressHandlerlastName(e) {
+        if (this.value.length <=2) {
+           document.getElementById("errorLastName").innerHTML="*More than 2 characters required";
+        } else {
+            document.getElementById("errorLastName").innerHTML="";
+        }
+    }
+    function pressHandlerEmail(e) {
+        if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(this.value)) {
+            document.getElementById("errorEmail").innerHTML="";
+          
+        } else {
+            document.getElementById("errorEmail").innerHTML="*The email looks invalid";
+        }
+    }
+
+    function pressHandlerPassword(e) {
+        if (this.value.length <=5) {
+           document.getElementById("errorPassword").innerHTML="*More than 5 characters required";
+        } else {
+            document.getElementById("errorPassword").innerHTML="";
+        }
+    }
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    
+</body>
+</html>
