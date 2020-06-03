@@ -54,7 +54,7 @@
       </div>
       <div class="form-group"> 
         <label for="passwordSecret">Password</label>
-        <input type="password" class="form-control" id="passwordSecret" placeholder="Password">
+        <input type="password" class="form-control" id="passwordSecret" placeholder="Password" required>
         <span id="errorPassword" class="text-danger font-weight-bold" ></span>
       </div>
     </form >
@@ -81,7 +81,7 @@
         
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Dismiss</button>
+        <button type="submit" class="btn btn-secondary" data-dismiss="modal">Dismiss</button>
       </div>
     </div>
   </div>
@@ -90,7 +90,10 @@
 
   <script type="text/javascript">
      $('#postData').click(function() {
-            callAjax(document.getElementById('emailId').value,document.getElementById('passwordSecret').value);
+            if(allComplete())
+           {
+             callAjax(document.getElementById('emailId').value,document.getElementById('passwordSecret').value);
+             } 
     
         });
 
@@ -152,6 +155,50 @@
             document.getElementById("errorPassword").innerHTML="";
         }
     }
+
+    function allComplete(){
+      if(document.getElementById("firstName").value ==""){
+        document.getElementById("modalResult").innerHTML="First Name Missing";
+                $('#postResult').modal('show')
+                return false;
+      }
+      else if(document.getElementById("lastName").value ==""){
+        document.getElementById("modalResult").innerHTML="Last Name Missing";
+                $('#postResult').modal('show')
+                return false;
+      }
+      else if(checkRadioButtonSelected())
+      {
+        document.getElementById("modalResult").innerHTML="Radio Button Not Selected";
+                $('#postResult').modal('show')
+                return false;
+      }
+     else if(document.getElementById("emailId").value =="")
+      {
+        document.getElementById("modalResult").innerHTML="Email Missing";
+                $('#postResult').modal('show')
+                return false;
+      }else if(document.getElementById("passwordSecret").value =="")
+      {
+        document.getElementById("modalResult").innerHTML="Password Missing";
+                $('#postResult').modal('show')
+                return false;
+      }else
+       return true;
+    }
+
+    function checkRadioButtonSelected(){
+      const rbs = document.querySelectorAll('input[name="gender"]');
+      console.log(rbs);
+      for (const rb of rbs) {
+        console.log(rb.checked);
+                if (rb.checked) {
+                    return false;
+                }        
+           }
+           return true;
+    }
+
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
